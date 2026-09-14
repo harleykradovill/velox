@@ -77,6 +77,17 @@ $surface: #202020;
     color: $primary;
 }
 
+#server-status {
+    width: 30;
+    height: auto;
+    margin-top: 1;
+    padding: 1 2;
+    border: round $primary;
+    background: $surface;
+    content-align: center top;
+    text-align: center;
+}
+
 /* ==================== */
 /* Configuration Screen */
 /* ==================== */
