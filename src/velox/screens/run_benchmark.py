@@ -40,16 +40,59 @@ class RunBenchmarkScreen(Screen):
         yield Static(LOGO, id="logo")
         yield Container(
             Label("Scenario"),
-            Select(SCENARIOS, id="scenario", classes="select"),
+            Select(
+                SCENARIOS,
+                id="scenario",
+                classes="select",
+                allow_blank=True,
+                prompt="Select scenario",
+            ),
             Label("Concurrent Workers"),
-            Select(WORKERS, id="users", classes="select"),
+            Select(
+                WORKERS,
+                id="users",
+                classes="select",
+                allow_blank=True,
+                prompt="Select workers",
+            ),
             Label("Ramp-Up Time"),
-            Select(RAMP_UPS, id="ramp-up", classes="select"),
+            Select(
+                RAMP_UPS,
+                id="ramp-up",
+                classes="select",
+                allow_blank=True,
+                prompt="Select ramp-up",
+            ),
             Label("Duration"),
-            Select(DURATIONS, id="duration", classes="select"),
-            Button("Start Benchmark", id="start", classes="btn"),
+            Select(
+                DURATIONS,
+                id="duration",
+                classes="select",
+                allow_blank=True,
+                prompt="Select duration",
+            ),
+            Button("Start Benchmark", id="start", classes="btn", disabled=True),
             Button("Go Back", id="return", classes="btn"),
             id="active-benchmark-container",
+        )
+
+    def on_select_changed(self, event: Select.Changed) -> None:
+        """
+        Enable the start button once every option has been chosen.
+
+        :param event: Select change event
+        """
+        self.query_one("#start", Button).disabled = not self._all_set()
+
+    def _all_set(self) -> bool:
+        """
+        Check whether every benchmark option has a value.
+
+        :returns: True if all selects have a value, False otherwise
+        """
+        return all(
+            not self.query_one(selector, Select).is_blank()
+            for selector in ("#scenario", "#users", "#ramp-up", "#duration")
         )
 
     def on_button_pressed(self, event: Button.Pressed) -> None:

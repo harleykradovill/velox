@@ -33,6 +33,13 @@ $surface: #202020;
     color: $background;
 }
 
+.btn:disabled {
+    text-opacity: 0.4;
+    background: $surface;
+    color: $text-muted;
+    border: tall $surface;
+}
+
 .select {
     width: 30;
 }
