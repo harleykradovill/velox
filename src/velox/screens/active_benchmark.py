@@ -193,7 +193,7 @@ class ActiveBenchmarkScreen(Screen):
         self._update_plots()
         if self.runner.done and not self.runner.cancelled:
             self._timer.stop()
-            self.app.push_screen(BenchmarkDetailsScreen(self.runner.benchmark))
+            self.app.switch_screen(BenchmarkDetailsScreen(self.runner.benchmark))
 
     def _record_sample(self, snap: dict) -> None:
         """
