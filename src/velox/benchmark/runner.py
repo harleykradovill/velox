@@ -15,11 +15,13 @@ class BenchmarkRunner:
         users: int,
         duration: float,
         config,
+        ramp_up: float = 0.0,
     ) -> None:
         self.scenario = scenario
         self.users = users
         self.duration = duration
         self.config = config
+        self.ramp_up = min(ramp_up, duration)
         self.metrics = Metrics()
         self._stop = asyncio.Event()
         self._started: float | None = None
@@ -30,6 +32,21 @@ class BenchmarkRunner:
     @property
     def active_users(self) -> int:
         return self._active_users
+
+    @property
+    def target_users(self) -> int:
+        """
+        Number of workers that should be active at the current elapsed time.
+
+        Scales linearly from a fraction of the full count to the full count
+        over the ramp-up window, then stays at the full count.
+
+        :returns: Target worker count for the current point in the run
+        """
+        if self.ramp_up <= 0:
+            return self.users
+        progress = min(self.elapsed / self.ramp_up, 1.0)
+        return max(1, round(self.users * (0.25 + 0.75 * progress)))
 
     @property
     def elapsed(self) -> float:
@@ -71,6 +88,9 @@ class BenchmarkRunner:
         self._active_users += 1
         try:
             while not self._stop.is_set():
+                if self._active_users > self.target_users:
+                    await asyncio.sleep(0.1)
+                    continue
                 start = time.perf_counter()
                 ok = await self.scenario.run(client)
                 elapsed = (time.perf_counter() - start) * 1000

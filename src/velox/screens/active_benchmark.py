@@ -53,7 +53,9 @@ class ActiveBenchmarkScreen(Screen):
     Live dashboard shown while a benchmark is running.
     """
 
-    def __init__(self, scenario, users: int, duration: str, config) -> None:
+    def __init__(
+        self, scenario, users: int, duration: str, config, ramp_up: str = "0s"
+    ) -> None:
         """
         Create the screen and its benchmark runner.
 
@@ -61,12 +63,14 @@ class ActiveBenchmarkScreen(Screen):
         :param users: Number of concurrent workers
         :param duration: Duration string like "30s" or "5m"
         :param config: Application configuration
+        :param ramp_up: Ramp-up duration string like "10s" or "1m"
         """
         super().__init__()
         self.runner = BenchmarkRunner(
             scenario=scenario,
             users=users,
             duration=_parse_duration(duration),
+            ramp_up=_parse_duration(ramp_up),
             config=config,
         )
         self._samples: list[float] = []
@@ -213,6 +217,9 @@ class ActiveBenchmarkScreen(Screen):
         """
         self.query_one("#runtime", Label).update(
             f"Runtime: {_fmt_clock(elapsed)} / {_fmt_clock(self.runner.duration)}"
+        )
+        self.query_one("#workers", Label).update(
+            f"Workers: {self.runner.active_users}/{self.runner.users}"
         )
         self.query_one("#progress", ProgressBar).update(progress=elapsed)
         self.query_one("#requests", Label).update(f"{snap['requests']:,}")
