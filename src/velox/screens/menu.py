@@ -1,10 +1,10 @@
-import httpx
 from textual.app import ComposeResult
 from textual.containers import Container
 from textual.screen import Screen
 from textual.widgets import ListView, ListItem, Label, Static
 from textual import on
 from ..ascii import LOGO
+from ..connection import check_server
 
 from .configuration import ConfigurationScreen
 from .server import ServerInformation
@@ -61,34 +61,8 @@ class ServerStatus(Static):
         """
         Query the Jellyfin server and update the status box.
         """
-        config = self.app.config.server
-        if not config.url or not config.api_key:
-            self._set_status("not_configured")
-            return
-        headers = {"Authorization": f'MediaBrowser Token="{config.api_key}"'}
-        try:
-            async with httpx.AsyncClient(
-                base_url=config.url.rstrip("/"), headers=headers, timeout=5
-            ) as client:
-                info = await client.get("/System/Info")
-        except httpx.HTTPError:
-            self._set_status("offline")
-            return
-        if info.status_code == 401:
-            self._set_status("unauthorized")
-        elif info.status_code < 400:
-            try:
-                data = info.json()
-            except ValueError:
-                self._set_status("offline")
-                return
-            self._set_status(
-                "online",
-                data.get("ServerName") or data.get("serverName") or "Unknown",
-                data.get("Version") or data.get("version") or "Unknown",
-            )
-        else:
-            self._set_status("offline")
+        status, name, version = await check_server(self.app.config.server)
+        self._set_status(status, name, version)
 
     def _set_status(self, status: str, name: str = "", version: str = "") -> None:
         """

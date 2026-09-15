@@ -1,11 +1,13 @@
 from ..ascii import LOGO
 from ..benchmark import ApiBenchmarkScenario, LibraryBenchmarkScenario
+from ..connection import check_server
 from textual.app import ComposeResult
 from textual.containers import Container
 from textual.screen import Screen
 from textual.widgets import Button, Input, Label, Select, Static
 
 from .active_benchmark import ActiveBenchmarkScreen
+from .error import ErrorScreen
 
 SCENARIOS = [
     ("API", "api"),
@@ -99,19 +101,34 @@ class RunBenchmarkScreen(Screen):
         if event.button.id == "return":
             self.app.pop_screen()
         elif event.button.id == "start":
-            users = int(self.query_one("#users", Select).value)
-            duration = self.query_one("#duration", Select).value
-            scenario = self.query_one("#scenario", Select).value
-            ramp_up = self.query_one("#ramp-up", Select).value
-            self.app.push_screen(
-                ActiveBenchmarkScreen(
-                    scenario=self._make_scenario(scenario),
-                    users=users,
-                    duration=duration,
-                    ramp_up=ramp_up,
-                    config=self.app.config,
-                )
+            self.run_worker(self._start())
+
+    async def _start(self) -> None:
+        """
+        Validate the server connection, then start the benchmark.
+        """
+        status, _, _ = await check_server(self.app.config.server)
+        if status != "online":
+            ErrorScreen.show(
+                self.app,
+                "Cannot Start Benchmark",
+                "Velox could not reach the Jellyfin server.",
+                "Check the server URL and API key in Configuration.",
             )
+            return
+        users = int(self.query_one("#users", Select).value)
+        duration = self.query_one("#duration", Select).value
+        scenario = self.query_one("#scenario", Select).value
+        ramp_up = self.query_one("#ramp-up", Select).value
+        self.app.push_screen(
+            ActiveBenchmarkScreen(
+                scenario=self._make_scenario(scenario),
+                users=users,
+                duration=duration,
+                ramp_up=ramp_up,
+                config=self.app.config,
+            )
+        )
 
     @staticmethod
     def _make_scenario(value: str):
