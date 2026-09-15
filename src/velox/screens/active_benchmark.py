@@ -158,6 +158,7 @@ class ActiveBenchmarkScreen(Screen):
             plot.set_y_formatter(NumericAxisFormatter())
             plot.set_xlabel("Time")
             plot.set_ylabel(ylabel)
+            plot.set_xlimits(xmin=0, xmax=self.runner.duration)
             plot.set_ylimits(ymin=0)
             plot.show_legend(location=LegendLocation.TOPRIGHT)
 
