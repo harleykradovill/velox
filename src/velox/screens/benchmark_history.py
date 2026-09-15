@@ -14,6 +14,7 @@ COLUMNS = {
     "date": 16,
     "scenario": 20,
     "duration": 10,
+    "ramp_up": 10,
     "workers": 10,
 }
 
@@ -42,7 +43,7 @@ class BenchmarkHistoryScreen(Screen):
         yield Static(LOGO, id="logo")
         yield Container(
             Container(
-                _row("Date/Time", "Scenario", "Duration", "Workers"),
+                _row("Date/Time", "Scenario", "Duration", "Ramp-Up", "Workers"),
                 ListView(id="history-list", classes="history-list"),
                 id="history-table",
             ),
@@ -63,6 +64,7 @@ class BenchmarkHistoryScreen(Screen):
                         _fmt_created(benchmark.created_at),
                         benchmark.scenario,
                         _fmt_duration(benchmark.duration),
+                        _fmt_duration(benchmark.ramp_up),
                         f"{benchmark.workers}",
                     ),
                     id=f"benchmark-{benchmark.id}",

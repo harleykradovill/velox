@@ -97,6 +97,7 @@ class BenchmarkRunner:
                 scenario=self.scenario.name,
                 duration=self.duration,
                 workers=self.users,
+                ramp_up=self.ramp_up,
                 results=self.metrics.snapshot(),
             )
 

@@ -37,6 +37,12 @@ class BenchmarkDetailsScreen(Screen):
                 id="duration",
                 classes="info-value",
             ),
+            Label("Ramp-Up", classes="info-label"),
+            Label(
+                _fmt_duration(self.benchmark.ramp_up),
+                id="ramp-up",
+                classes="info-value",
+            ),
             Label("Requests", classes="info-label"),
             Label(f"{results['requests']:,}", id="requests", classes="info-value"),
             Label("Latency", classes="info-label"),

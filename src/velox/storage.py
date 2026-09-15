@@ -17,6 +17,7 @@ class Benchmark(Base):
     scenario: Mapped[str] = mapped_column(String)
     duration: Mapped[float] = mapped_column(Float)
     workers: Mapped[int] = mapped_column(Integer)
+    ramp_up: Mapped[float] = mapped_column(Float, default=0.0)
     results: Mapped[dict] = mapped_column(JSON)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
@@ -26,7 +27,11 @@ Base.metadata.create_all(_engine)
 
 
 def save_benchmark(
-    scenario: str, duration: float, workers: int, results: dict
+    scenario: str,
+    duration: float,
+    workers: int,
+    ramp_up: float,
+    results: dict,
 ) -> Benchmark:
     """
     Persist a completed benchmark run.
@@ -34,6 +39,7 @@ def save_benchmark(
     :param scenario: Name of the benchmark scenario.
     :param duration: Benchmark duration in seconds.
     :param workers: Number of concurrent workers.
+    :param ramp_up: Ramp-up duration in seconds.
     :param results: Metrics snapshot to store as JSON.
     :returns: The persisted benchmark row
     """
@@ -42,6 +48,7 @@ def save_benchmark(
             scenario=scenario,
             duration=duration,
             workers=workers,
+            ramp_up=ramp_up,
             results=results,
         )
         session.add(benchmark)
