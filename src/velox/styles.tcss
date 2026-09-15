@@ -259,7 +259,7 @@ $surface: #202020;
 }
 
 #history-table {
-    width: 56;
+    width: 70;
     height: auto;
 }
 
@@ -297,6 +297,10 @@ $surface: #202020;
 }
 
 .cell-duration {
+    width: 10;
+}
+
+.cell-ramp_up {
     width: 10;
 }
 
