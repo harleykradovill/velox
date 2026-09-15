@@ -26,12 +26,19 @@ class BenchmarkRunner:
         self._stop = asyncio.Event()
         self._started: float | None = None
         self._done = False
-        self._active_users = 0
         self.benchmark = None
 
     @property
     def active_users(self) -> int:
-        return self._active_users
+        """
+        Number of workers currently performing requests.
+
+        Follows the same ramp curve as the gating logic so the
+        dashboard reflects actual load rather than spawned tasks.
+
+        :returns: Active worker count for the current point in the run
+        """
+        return min(self.target_users, self.users)
 
     @property
     def target_users(self) -> int:
@@ -69,7 +76,9 @@ class BenchmarkRunner:
         ) as client:
             await self.scenario.setup(client)
             self._started = time.monotonic()
-            tasks = [asyncio.create_task(self._user(client)) for _ in range(self.users)]
+            tasks = [
+                asyncio.create_task(self._user(client, i)) for i in range(self.users)
+            ]
             await asyncio.sleep(self.duration)
             self._stop.set()
             await asyncio.gather(*tasks, return_exceptions=True)
@@ -84,16 +93,12 @@ class BenchmarkRunner:
     def stop(self) -> None:
         self._stop.set()
 
-    async def _user(self, client: httpx.AsyncClient) -> None:
-        self._active_users += 1
-        try:
-            while not self._stop.is_set():
-                if self._active_users > self.target_users:
-                    await asyncio.sleep(0.1)
-                    continue
-                start = time.perf_counter()
-                ok = await self.scenario.run(client)
-                elapsed = (time.perf_counter() - start) * 1000
-                await self.metrics.record(elapsed, ok)
-        finally:
-            self._active_users -= 1
+    async def _user(self, client: httpx.AsyncClient, index: int) -> None:
+        while not self._stop.is_set():
+            if index >= self.target_users:
+                await asyncio.sleep(0.1)
+                continue
+            start = time.perf_counter()
+            ok = await self.scenario.run(client)
+            elapsed = (time.perf_counter() - start) * 1000
+            await self.metrics.record(elapsed, ok)
