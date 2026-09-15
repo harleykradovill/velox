@@ -26,6 +26,7 @@ class BenchmarkRunner:
         self._stop = asyncio.Event()
         self._started: float | None = None
         self._done = False
+        self._cancelled = False
         self.benchmark = None
 
     @property
@@ -65,6 +66,10 @@ class BenchmarkRunner:
     def done(self) -> bool:
         return self._done
 
+    @property
+    def cancelled(self) -> bool:
+        return self._cancelled
+
     async def run(self) -> None:
         headers = {
             "Authorization": f'MediaBrowser Token="{self.config.server.api_key}"'
@@ -79,10 +84,15 @@ class BenchmarkRunner:
             tasks = [
                 asyncio.create_task(self._user(client, i)) for i in range(self.users)
             ]
-            await asyncio.sleep(self.duration)
+            try:
+                await asyncio.wait_for(self._stop.wait(), timeout=self.duration)
+            except asyncio.TimeoutError:
+                pass
             self._stop.set()
             await asyncio.gather(*tasks, return_exceptions=True)
             self._done = True
+            if self._cancelled:
+                return
             self.benchmark = save_benchmark(
                 scenario=self.scenario.name,
                 duration=self.duration,
@@ -92,6 +102,7 @@ class BenchmarkRunner:
 
     def stop(self) -> None:
         self._stop.set()
+        self._cancelled = True
 
     async def _user(self, client: httpx.AsyncClient, index: int) -> None:
         while not self._stop.is_set():

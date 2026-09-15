@@ -191,7 +191,7 @@ class ActiveBenchmarkScreen(Screen):
         self._record_sample(snap)
         self._update_stats(elapsed, snap)
         self._update_plots()
-        if self.runner.done:
+        if self.runner.done and not self.runner.cancelled:
             self._timer.stop()
             self.app.push_screen(BenchmarkDetailsScreen(self.runner.benchmark))
 
