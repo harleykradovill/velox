@@ -18,6 +18,7 @@ class Metrics:
         return {
             "requests": len(lat),
             "errors": self._errors,
+            "avg": sum(lat) / len(lat) if lat else 0.0,
             "p50": self._percentile(lat, 50),
             "p95": self._percentile(lat, 95),
             "p99": self._percentile(lat, 99),

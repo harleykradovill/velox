@@ -232,19 +232,78 @@ $surface: #202020;
     margin-top: 1;
 }
 
-#details-container .info-label {
+#details-title {
     color: $primary;
     text-style: bold;
+    width: 100%;
+    text-align: center;
     margin-top: 1;
 }
 
-#details-container .info-sub {
+#verdict-panel {
+    width: 60;
+    height: auto;
+    align: center middle;
+    margin-top: 1;
+    padding: 1 2;
+    border: round $primary;
+    background: $surface;
+}
+
+#verdict-panel .verdict-label {
+    color: $text-muted;
+    text-style: bold;
+    width: 100%;
+    text-align: center;
+}
+
+#verdict-panel .verdict-value {
     color: $primary;
+    text-style: bold;
+    width: 100%;
+    text-align: center;
+}
+
+#verdict-panel #verdict-message {
+    color: $text;
+    width: 100%;
+    text-align: center;
+}
+
+#details-container .stats-grid {
+    grid-size: 4 2;
+    grid-columns: 1fr 1fr 1fr 1fr;
+    grid-rows: 4 4;
+    width: 72;
+    height: auto;
     margin-top: 1;
 }
 
-#details-container .info-value {
-    margin-top: 0;
+#details-container .stat-card {
+    height: 4;
+    padding: 0 1;
+    border: round $surface;
+    background: $surface;
+}
+
+#details-container .stat-card .stat-label {
+    color: $text-muted;
+    text-style: bold;
+    width: 100%;
+    text-align: center;
+}
+
+#details-container .stat-card .stat-value {
+    color: $primary;
+    width: 100%;
+    text-align: center;
+}
+
+#details-meta {
+    color: $text-muted;
+    width: 100%;
+    text-align: center;
+    margin-top: 1;
 }
 
 /* ======================== */

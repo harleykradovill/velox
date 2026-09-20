@@ -1,10 +1,18 @@
 from textual.app import ComposeResult
-from textual.containers import Container
+from textual.containers import Container, Grid, Vertical
 from textual.screen import Screen
 from textual.widgets import Button, Label, Static
 
 from ..ascii import LOGO
+from ..benchmark import ApiBenchmarkScenario, LibraryBenchmarkScenario
 from ..storage import Benchmark
+
+_FAST_ERROR_RATE = 0.01
+_MAX_ERROR_RATE = 0.05
+_SCENARIO_BUDGETS = {
+    scenario.name: (scenario.fast_latency, scenario.slow_latency)
+    for scenario in (ApiBenchmarkScenario, LibraryBenchmarkScenario)
+}
 
 
 def _fmt_ms(ms: float) -> str:
@@ -16,6 +24,36 @@ def _fmt_duration(seconds: float) -> str:
     return f"{minutes:02d}:{secs:02d}"
 
 
+def _fmt_throughput(requests: int, duration: float) -> str:
+    return f"{requests / max(duration, 1):.1f} req/sec"
+
+
+def _verdict(results: dict, scenario_name: str) -> tuple[str, str]:
+    """
+    Judge the run against what a typical Jellyfin server should deliver.
+
+    :param results: Metrics snapshot for the run
+    :param scenario_name: Name of the scenario that produced the run
+    :returns: A (title, message) pair describing the verdict
+    """
+    fast, slow = _SCENARIO_BUDGETS[scenario_name]
+    avg = results["avg"]
+    error_rate = results["errors"] / max(results["requests"], 1)
+    if avg <= fast and error_rate < _FAST_ERROR_RATE:
+        return "Excellent", "Faster than a typical Jellyfin server."
+    if avg <= slow and error_rate < _MAX_ERROR_RATE:
+        return "Normal", "Within the expected range for a Jellyfin server."
+    return "Slow", "Slower than a typical Jellyfin server."
+
+
+def _stat_card(label: str, value: str, card_id: str) -> Vertical:
+    return Vertical(
+        Label(label, classes="stat-label"),
+        Label(value, id=card_id, classes="stat-value"),
+        classes="stat-card",
+    )
+
+
 class BenchmarkDetailsScreen(Screen):
     def __init__(self, benchmark: Benchmark) -> None:
         super().__init__()
@@ -23,34 +61,42 @@ class BenchmarkDetailsScreen(Screen):
 
     def compose(self) -> ComposeResult:
         results = self.benchmark.results
+        verdict, verdict_msg = _verdict(results, self.benchmark.scenario)
         yield Static(LOGO, id="logo")
         yield Container(
-            Label("Benchmark ID", classes="info-label"),
-            Label(f"#{self.benchmark.id}", id="id", classes="info-value"),
-            Label("Scenario", classes="info-label"),
-            Label(self.benchmark.scenario, id="scenario", classes="info-value"),
-            Label("Users", classes="info-label"),
-            Label(f"{self.benchmark.workers}", id="users", classes="info-value"),
-            Label("Duration", classes="info-label"),
             Label(
-                _fmt_duration(self.benchmark.duration),
-                id="duration",
-                classes="info-value",
+                f"{self.benchmark.scenario}  ·  #{self.benchmark.id}",
+                id="details-title",
             ),
-            Label("Ramp-Up", classes="info-label"),
+            Container(
+                Label("Verdict", classes="verdict-label"),
+                Label(verdict, id="verdict", classes="verdict-value"),
+                Label(verdict_msg, id="verdict-message"),
+                id="verdict-panel",
+            ),
+            Grid(
+                _stat_card("Avg Latency", _fmt_ms(results["avg"]), "avg"),
+                _stat_card(
+                    "Avg Throughput",
+                    _fmt_throughput(results["requests"], self.benchmark.duration),
+                    "throughput",
+                ),
+                _stat_card("Requests", f"{results['requests']:,}", "requests"),
+                _stat_card("Errors", f"{results['errors']}", "errors"),
+                _stat_card("P50", _fmt_ms(results["p50"]), "p50"),
+                _stat_card("P95", _fmt_ms(results["p95"]), "p95"),
+                _stat_card("P99", _fmt_ms(results["p99"]), "p99"),
+                _stat_card(
+                    "Error Rate",
+                    f"{results['errors'] / max(results['requests'], 1):.2%}",
+                    "error-rate",
+                ),
+                classes="stats-grid",
+            ),
             Label(
-                _fmt_duration(self.benchmark.ramp_up),
-                id="ramp-up",
-                classes="info-value",
+                f"Users: {self.benchmark.workers}   Duration: {_fmt_duration(self.benchmark.duration)}   Ramp-Up: {_fmt_duration(self.benchmark.ramp_up)}",
+                id="details-meta",
             ),
-            Label("Requests", classes="info-label"),
-            Label(f"{results['requests']:,}", id="requests", classes="info-value"),
-            Label("Latency", classes="info-label"),
-            Label(f"P50  {_fmt_ms(results['p50'])}", id="p50", classes="info-value"),
-            Label(f"P95  {_fmt_ms(results['p95'])}", id="p95", classes="info-value"),
-            Label(f"P99  {_fmt_ms(results['p99'])}", id="p99", classes="info-value"),
-            Label("Errors", classes="info-label"),
-            Label(f"{results['errors']}", id="errors", classes="info-value"),
             Button("Go Back", id="return", classes="btn"),
             id="details-container",
         )

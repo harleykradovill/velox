@@ -26,6 +26,8 @@ SEARCH_TERMS = [
 
 class ApiBenchmarkScenario(BenchmarkScenario):
     name = "API"
+    fast_latency = 150.0
+    slow_latency = 400.0
 
     def __init__(self) -> None:
         self._item_ids: list[str] = []

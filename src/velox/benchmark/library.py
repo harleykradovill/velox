@@ -41,6 +41,8 @@ PAGE_SIZE = 50
 
 class LibraryBenchmarkScenario(BenchmarkScenario):
     name = "Library"
+    fast_latency = 300.0
+    slow_latency = 700.0
 
     def __init__(self) -> None:
         """

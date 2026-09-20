@@ -5,6 +5,8 @@ import httpx
 
 class BenchmarkScenario(ABC):
     name: str
+    fast_latency = 350.0
+    slow_latency = 650.0
 
     @abstractmethod
     async def setup(self, client: httpx.AsyncClient) -> None:
