@@ -310,6 +310,16 @@ $surface: #202020;
 /* Benchmark History Screen */
 /* ======================== */
 
+.btn-history {
+    width: 70;
+    margin-top: 1;
+}
+
+.btn-history:focus {
+    background: $primary;
+    color: $background;
+}
+
 #history-container {
     width: 100%;
     height: auto;

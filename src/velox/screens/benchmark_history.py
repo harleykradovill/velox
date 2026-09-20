@@ -47,7 +47,7 @@ class BenchmarkHistoryScreen(Screen):
                 ListView(id="history-list", classes="history-list"),
                 id="history-table",
             ),
-            Button("Go Back", id="return", classes="btn"),
+            Button("Go Back", id="return", classes="btn-history"),
             id="history-container",
         )
 
