@@ -225,10 +225,19 @@ $surface: #202020;
 /* Benchmark Details Screen  */
 /* ========================= */
 
+.btn-details {
+    width: 72;
+    margin-top: 1;
+}
+
+.btn-details:focus {
+    background: $primary;
+    color: $background;
+}
+
 #details-container {
     width: 100%;
     height: auto;
-    align: center top;
     margin-top: 1;
 }
 
@@ -241,7 +250,7 @@ $surface: #202020;
 }
 
 #verdict-panel {
-    width: 60;
+    width: 72;
     height: auto;
     align: center middle;
     margin-top: 1;
@@ -272,7 +281,7 @@ $surface: #202020;
 
 #details-container .stats-grid {
     grid-size: 4 2;
-    grid-columns: 1fr 1fr 1fr 1fr;
+    grid-columns: 18 18 18 18;
     grid-rows: 4 4;
     width: 72;
     height: auto;

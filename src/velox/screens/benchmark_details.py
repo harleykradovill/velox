@@ -1,5 +1,5 @@
 from textual.app import ComposeResult
-from textual.containers import Container, Grid, Vertical
+from textual.containers import Container, Grid, Vertical, Center
 from textual.screen import Screen
 from textual.widgets import Button, Label, Static
 
@@ -63,41 +63,45 @@ class BenchmarkDetailsScreen(Screen):
         results = self.benchmark.results
         verdict, verdict_msg = _verdict(results, self.benchmark.scenario)
         yield Static(LOGO, id="logo")
-        yield Container(
+        yield Vertical(
             Label(
                 f"{self.benchmark.scenario}  ·  #{self.benchmark.id}",
                 id="details-title",
             ),
-            Container(
-                Label("Verdict", classes="verdict-label"),
-                Label(verdict, id="verdict", classes="verdict-value"),
-                Label(verdict_msg, id="verdict-message"),
-                id="verdict-panel",
+            Center(
+                Container(
+                    Label("Verdict", classes="verdict-label"),
+                    Label(verdict, id="verdict", classes="verdict-value"),
+                    Label(verdict_msg, id="verdict-message"),
+                    id="verdict-panel",
+                )
             ),
-            Grid(
-                _stat_card("Avg Latency", _fmt_ms(results["avg"]), "avg"),
-                _stat_card(
-                    "Avg Throughput",
-                    _fmt_throughput(results["requests"], self.benchmark.duration),
-                    "throughput",
-                ),
-                _stat_card("Requests", f"{results['requests']:,}", "requests"),
-                _stat_card("Errors", f"{results['errors']}", "errors"),
-                _stat_card("P50", _fmt_ms(results["p50"]), "p50"),
-                _stat_card("P95", _fmt_ms(results["p95"]), "p95"),
-                _stat_card("P99", _fmt_ms(results["p99"]), "p99"),
-                _stat_card(
-                    "Error Rate",
-                    f"{results['errors'] / max(results['requests'], 1):.2%}",
-                    "error-rate",
-                ),
-                classes="stats-grid",
+            Center(
+                Grid(
+                    _stat_card("Avg Latency", _fmt_ms(results["avg"]), "avg"),
+                    _stat_card(
+                        "Avg Throughput",
+                        _fmt_throughput(results["requests"], self.benchmark.duration),
+                        "throughput",
+                    ),
+                    _stat_card("Requests", f"{results['requests']:,}", "requests"),
+                    _stat_card("Errors", f"{results['errors']}", "errors"),
+                    _stat_card("P50", _fmt_ms(results["p50"]), "p50"),
+                    _stat_card("P95", _fmt_ms(results["p95"]), "p95"),
+                    _stat_card("P99", _fmt_ms(results["p99"]), "p99"),
+                    _stat_card(
+                        "Error Rate",
+                        f"{results['errors'] / max(results['requests'], 1):.2%}",
+                        "error-rate",
+                    ),
+                    classes="stats-grid",
+                )
             ),
             Label(
                 f"Users: {self.benchmark.workers}   Duration: {_fmt_duration(self.benchmark.duration)}   Ramp-Up: {_fmt_duration(self.benchmark.ramp_up)}",
                 id="details-meta",
             ),
-            Button("Go Back", id="return", classes="btn"),
+            Center(Button("Go Back", id="return", classes="btn-details")),
             id="details-container",
         )
 
