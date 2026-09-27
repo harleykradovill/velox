@@ -1,5 +1,9 @@
 from ..ascii import LOGO
-from ..benchmark import GeneralBenchmarkScenario, LibraryBenchmarkScenario
+from ..benchmark import (
+    GeneralBenchmarkScenario,
+    LibraryBenchmarkScenario,
+    SearchBenchmarkScenario,
+)
 from ..connection import check_server
 from textual.app import ComposeResult
 from textual.containers import Container
@@ -12,6 +16,7 @@ from .error import ErrorScreen
 SCENARIOS = [
     ("General", "general"),
     ("Library", "library"),
+    ("Search", "search"),
 ]
 
 DURATIONS = [
@@ -134,6 +139,8 @@ class RunBenchmarkScreen(Screen):
     def _make_scenario(value: str):
         if value == "library":
             return LibraryBenchmarkScenario()
+        if value == "search":
+            return SearchBenchmarkScenario()
         return GeneralBenchmarkScenario()
 
     def key_down(self) -> None:

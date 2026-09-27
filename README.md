@@ -8,6 +8,7 @@ A terminal app that load tests your Jellyfin server and shows you how it holds u
 
 - **General Benchmark:** A mix of user lookups, library browsing, searching, and metadata fetches.
 - **Library Benchmark:** Heavy browsing and filtering of libraries with different sort orders, filters, and item types.
+- **Search Benchmark:** Dedicated search load with varied terms, item types, media types, and pagination.
 
 ### Running a benchmark
 
