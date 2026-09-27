@@ -112,32 +112,6 @@ $surface: #202020;
     margin-top: 1;
 }
 
-/* ========================= */
-/* Server Information Screen */
-/* ========================= */
-
-#server-container {
-    width: 100%;
-    height: auto;
-    align: center top;
-    margin-top: 1;
-}
-
-#server-container .info-label {
-    color: $primary;
-    text-style: bold;
-    margin-top: 1;
-}
-
-#server-container .info-sub {
-    color: $primary;
-    margin-top: 1;
-}
-
-#server-container .info-value {
-    margin-top: 0;
-}
-
 /* ==================== */
 /* Run Benchmark Screen */
 /* ==================== */

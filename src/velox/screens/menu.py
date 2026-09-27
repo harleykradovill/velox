@@ -7,7 +7,6 @@ from ..ascii import LOGO
 from ..connection import check_server
 
 from .configuration import ConfigurationScreen
-from .server import ServerInformation
 from .run_benchmark import RunBenchmarkScreen
 from .benchmark_history import BenchmarkHistoryScreen
 
@@ -91,7 +90,6 @@ class MainMenu(Screen):
         yield Container(
             ListView(
                 ListItem(Label("Run Benchmark"), id="benchmark"),
-                ListItem(Label("Server Information"), id="server"),
                 ListItem(Label("Benchmark History"), id="history"),
                 ListItem(Label("Compare Results"), id="compare"),
                 ListItem(Label("Configuration"), id="configuration"),
@@ -126,8 +124,6 @@ class MainMenu(Screen):
         """
         if event.item.id == "configuration":
             self.app.push_screen(ConfigurationScreen())
-        elif event.item.id == "server":
-            self.app.push_screen(ServerInformation())
         elif event.item.id == "benchmark":
             self.app.push_screen(RunBenchmarkScreen())
         elif event.item.id == "history":
