@@ -24,8 +24,8 @@ SEARCH_TERMS = [
 ]
 
 
-class ApiBenchmarkScenario(BenchmarkScenario):
-    name = "API"
+class GeneralBenchmarkScenario(BenchmarkScenario):
+    name = "General"
     fast_latency = 150.0
     slow_latency = 400.0
 

@@ -1,10 +1,10 @@
-from .api import ApiBenchmarkScenario
+from .api import GeneralBenchmarkScenario
 from .base import BenchmarkScenario
 from .library import LibraryBenchmarkScenario
 from .runner import BenchmarkRunner
 
 __all__ = [
-    "ApiBenchmarkScenario",
+    "GeneralBenchmarkScenario",
     "BenchmarkScenario",
     "BenchmarkRunner",
     "LibraryBenchmarkScenario",

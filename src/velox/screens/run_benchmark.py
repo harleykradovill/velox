@@ -1,5 +1,5 @@
 from ..ascii import LOGO
-from ..benchmark import ApiBenchmarkScenario, LibraryBenchmarkScenario
+from ..benchmark import GeneralBenchmarkScenario, LibraryBenchmarkScenario
 from ..connection import check_server
 from textual.app import ComposeResult
 from textual.containers import Container
@@ -10,7 +10,7 @@ from .active_benchmark import ActiveBenchmarkScreen
 from .error import ErrorScreen
 
 SCENARIOS = [
-    ("API", "api"),
+    ("General", "general"),
     ("Library", "library"),
 ]
 
@@ -134,7 +134,7 @@ class RunBenchmarkScreen(Screen):
     def _make_scenario(value: str):
         if value == "library":
             return LibraryBenchmarkScenario()
-        return ApiBenchmarkScenario()
+        return GeneralBenchmarkScenario()
 
     def key_down(self) -> None:
         self.focus_next()

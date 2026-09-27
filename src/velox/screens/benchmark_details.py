@@ -4,14 +4,14 @@ from textual.screen import Screen
 from textual.widgets import Button, Label, Static
 
 from ..ascii import LOGO
-from ..benchmark import ApiBenchmarkScenario, LibraryBenchmarkScenario
+from ..benchmark import GeneralBenchmarkScenario, LibraryBenchmarkScenario
 from ..storage import Benchmark
 
 _FAST_ERROR_RATE = 0.01
 _MAX_ERROR_RATE = 0.05
 _SCENARIO_BUDGETS = {
     scenario.name: (scenario.fast_latency, scenario.slow_latency)
-    for scenario in (ApiBenchmarkScenario, LibraryBenchmarkScenario)
+    for scenario in (GeneralBenchmarkScenario, LibraryBenchmarkScenario)
 }
 
 

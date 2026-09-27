@@ -6,8 +6,8 @@ A terminal app that load tests your Jellyfin server and shows you how it holds u
 
 ### Scenarios
 
-- **API Stress Test:** A mix of user lookups, library browsing, searching, and metadata fetches.
-- **Library Stress Test:** Heavy browsing and filtering of libraries with different sort orders, filters, and item types.
+- **General Benchmark:** A mix of user lookups, library browsing, searching, and metadata fetches.
+- **Library Benchmark:** Heavy browsing and filtering of libraries with different sort orders, filters, and item types.
 
 ### Running a benchmark
 
