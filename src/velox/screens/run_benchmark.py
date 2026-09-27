@@ -41,6 +41,8 @@ RAMP_UPS = [
     ("1 minute", "1m"),
 ]
 
+SCENARIO_SELECT = "#scenario"
+
 
 class RunBenchmarkScreen(Screen):
     def compose(self) -> ComposeResult:
@@ -54,6 +56,7 @@ class RunBenchmarkScreen(Screen):
                 allow_blank=True,
                 prompt="Select scenario",
             ),
+            Static("Select a scenario", id="scenario-hint", classes="hint"),
             Label("Concurrent Workers"),
             Select(
                 WORKERS,
@@ -80,16 +83,32 @@ class RunBenchmarkScreen(Screen):
             ),
             Button("Start Benchmark", id="start", classes="btn", disabled=True),
             Button("Go Back", id="return", classes="btn"),
-            id="active-benchmark-container",
+            id="run-container",
         )
 
     def on_select_changed(self, event: Select.Changed) -> None:
         """
-        Enable the start button once every option has been chosen.
+        Enable the start button once every option has been chosen, and show
+        the description of the currently selected scenario.
 
         :param event: Select change event
         """
         self.query_one("#start", Button).disabled = not self._all_set()
+        if event.select.id == "scenario":
+            self._update_scenario_hint()
+
+    def _update_scenario_hint(self) -> None:
+        """
+        Show the description of the selected scenario, or clear it if none
+        is chosen.
+        """
+        scenario = self.query_one(SCENARIO_SELECT, Select)
+        hint = self.query_one("#scenario-hint", Static)
+        hint.update(
+            self._make_scenario(scenario.value).description
+            if not scenario.is_blank()
+            else "Select a scenario"
+        )
 
     def _all_set(self) -> bool:
         """
@@ -99,7 +118,7 @@ class RunBenchmarkScreen(Screen):
         """
         return all(
             not self.query_one(selector, Select).is_blank()
-            for selector in ("#scenario", "#users", "#ramp-up", "#duration")
+            for selector in (SCENARIO_SELECT, "#users", "#ramp-up", "#duration")
         )
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
@@ -123,7 +142,7 @@ class RunBenchmarkScreen(Screen):
             return
         users = int(self.query_one("#users", Select).value)
         duration = self.query_one("#duration", Select).value
-        scenario = self.query_one("#scenario", Select).value
+        scenario = self.query_one(SCENARIO_SELECT, Select).value
         ramp_up = self.query_one("#ramp-up", Select).value
         self.app.push_screen(
             ActiveBenchmarkScreen(

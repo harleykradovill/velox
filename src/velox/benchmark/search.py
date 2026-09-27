@@ -46,6 +46,10 @@ PAGE_SIZE = 20
 
 class SearchBenchmarkScenario(BenchmarkScenario):
     name = "Search"
+    description = (
+        "Search queries: plain terms, item-type and media-type filters, "
+        "paged results, and user-scoped searches."
+    )
     fast_latency = 200.0
     slow_latency = 500.0
 

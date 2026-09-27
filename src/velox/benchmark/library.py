@@ -41,6 +41,10 @@ PAGE_SIZE = 50
 
 class LibraryBenchmarkScenario(BenchmarkScenario):
     name = "Library"
+    description = (
+        "Library browsing: root and folder listings, pagination, sorting, "
+        "filtering, item-type views, latest items, and item counts."
+    )
     fast_latency = 300.0
     slow_latency = 700.0
 

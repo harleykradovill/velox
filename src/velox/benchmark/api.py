@@ -26,6 +26,10 @@ SEARCH_TERMS = [
 
 class GeneralBenchmarkScenario(BenchmarkScenario):
     name = "General"
+    description = (
+        "Mixed traffic across core endpoints: user lookup, library "
+        "browsing, search, and item metadata."
+    )
     fast_latency = 150.0
     slow_latency = 400.0
 
