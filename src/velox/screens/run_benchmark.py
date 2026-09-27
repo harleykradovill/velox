@@ -1,5 +1,6 @@
 from ..ascii import LOGO
 from ..benchmark import (
+    DiscoveryBenchmarkScenario,
     GeneralBenchmarkScenario,
     LibraryBenchmarkScenario,
     SearchBenchmarkScenario,
@@ -17,6 +18,7 @@ SCENARIOS = [
     ("General", "general"),
     ("Library", "library"),
     ("Search", "search"),
+    ("Discovery", "discovery"),
 ]
 
 DURATIONS = [
@@ -160,6 +162,8 @@ class RunBenchmarkScreen(Screen):
             return LibraryBenchmarkScenario()
         if value == "search":
             return SearchBenchmarkScenario()
+        if value == "discovery":
+            return DiscoveryBenchmarkScenario()
         return GeneralBenchmarkScenario()
 
     def key_down(self) -> None:

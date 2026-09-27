@@ -5,6 +5,7 @@ from textual.widgets import Button, Label, Static
 
 from ..ascii import LOGO
 from ..benchmark import (
+    DiscoveryBenchmarkScenario,
     GeneralBenchmarkScenario,
     LibraryBenchmarkScenario,
     SearchBenchmarkScenario,
@@ -19,6 +20,7 @@ _SCENARIO_BUDGETS = {
         GeneralBenchmarkScenario,
         LibraryBenchmarkScenario,
         SearchBenchmarkScenario,
+        DiscoveryBenchmarkScenario,
     )
 }
 
