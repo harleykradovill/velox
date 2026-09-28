@@ -289,6 +289,21 @@ $surface: #202020;
     text-align: center;
 }
 
+#details-container .plot-title {
+    color: $primary;
+    text-style: bold;
+    width: 100%;
+    text-align: center;
+    margin-top: 1;
+}
+
+#details-container #histogram-plot {
+    width: 85;
+    height: 10;
+    margin-top: 1;
+    margin-left: -8;
+}
+
 #details-meta {
     color: $text-muted;
     width: 100%;

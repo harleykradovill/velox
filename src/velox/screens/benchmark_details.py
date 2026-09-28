@@ -2,6 +2,7 @@ from textual.app import ComposeResult
 from textual.containers import Container, Grid, Vertical, Center
 from textual.screen import Screen
 from textual.widgets import Button, Label, Static
+from textual_plot import HiResMode, NumericAxisFormatter, PlotWidget
 
 from ..ascii import LOGO
 from ..benchmark import (
@@ -107,12 +108,42 @@ class BenchmarkDetailsScreen(Screen):
                     classes="stats-grid",
                 )
             ),
+            Label("Latency Distribution", classes="plot-title"),
+            Center(PlotWidget(id="histogram-plot", allow_pan_and_zoom=False)),
             Label(
                 f"Users: {self.benchmark.workers}   Duration: {_fmt_duration(self.benchmark.duration)}   Ramp-Up: {_fmt_duration(self.benchmark.ramp_up)}",
                 id="details-meta",
             ),
             Center(Button("Go Back", id="return", classes="btn-details")),
             id="details-container",
+        )
+
+    def on_mount(self) -> None:
+        """
+        Draw the latency distribution plot from the persisted histogram.
+        """
+        self._setup_histogram()
+
+    def _setup_histogram(self) -> None:
+        """
+        Render the bucketed latency histogram as a bar plot.
+        """
+        plot = self.query_one("#histogram-plot", PlotWidget)
+        plot.set_x_formatter(NumericAxisFormatter())
+        plot.set_y_formatter(NumericAxisFormatter())
+        plot.set_xlabel("Latency (ms)")
+        plot.set_ylimits(ymin=0)
+        plot.show_legend(is_visible=False)
+        histogram = self.benchmark.results.get("histogram", [])
+        if not histogram:
+            return
+        labels = [bucket["label"] for bucket in histogram]
+        counts = [bucket["count"] for bucket in histogram]
+        plot.bar(
+            labels,
+            counts,
+            bar_style="bold #fcc179",
+            hires_mode=HiResMode.BRAILLE,
         )
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
