@@ -6,9 +6,10 @@ A terminal app that load tests your Jellyfin server and shows you how it holds u
 
 ### Scenarios
 
-- **General Benchmark:** A mix of user lookups, library browsing, searching, and metadata fetches.
-- **Library Benchmark:** Heavy browsing and filtering of libraries with different sort orders, filters, and item types.
-- **Search Benchmark:** Dedicated search load with varied terms, item types, media types, and pagination.
+- **General:** Mixed traffic across core endpoints: user lookup, library browsing, search, and item metadata.
+- **Library:** Library browsing: root and folder listings, pagination, sorting, filtering, item-type views, latest items, and item counts.
+- **Search:** Search queries: plain terms, item-type and media-type filters, paged results, and user-scoped searches.
+- **Discovery:** Home screen discovery: suggestions, movie recommendations, next up and upcoming episodes, latest items, resume rows, and user data.
 
 ### Running a benchmark
 

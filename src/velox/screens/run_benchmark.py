@@ -58,7 +58,7 @@ class RunBenchmarkScreen(Screen):
                 allow_blank=True,
                 prompt="Select scenario",
             ),
-            Static("Select a scenario", id="scenario-hint", classes="hint"),
+            Static("", id="scenario-hint", classes="hint"),
             Label("Concurrent Workers"),
             Select(
                 WORKERS,
@@ -88,6 +88,12 @@ class RunBenchmarkScreen(Screen):
             id="run-container",
         )
 
+    def on_mount(self) -> None:
+        """
+        Hide the scenario hint until a scenario is selected.
+        """
+        self.query_one("#scenario-hint", Static).display = False
+
     def on_select_changed(self, event: Select.Changed) -> None:
         """
         Enable the start button once every option has been chosen, and show
@@ -106,11 +112,11 @@ class RunBenchmarkScreen(Screen):
         """
         scenario = self.query_one(SCENARIO_SELECT, Select)
         hint = self.query_one("#scenario-hint", Static)
-        hint.update(
-            self._make_scenario(scenario.value).description
-            if not scenario.is_blank()
-            else "Select a scenario"
-        )
+        if scenario.is_blank():
+            hint.display = False
+        else:
+            hint.display = True
+            hint.update(self._make_scenario(scenario.value).description)
 
     def _all_set(self) -> bool:
         """

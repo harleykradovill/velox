@@ -1,4 +1,4 @@
-from .api import GeneralBenchmarkScenario
+from .general import GeneralBenchmarkScenario
 from .base import BenchmarkScenario
 from .discovery import DiscoveryBenchmarkScenario
 from .library import LibraryBenchmarkScenario
