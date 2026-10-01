@@ -16,12 +16,14 @@ class BenchmarkRunner:
         duration: float,
         config,
         ramp_up: float = 0.0,
+        request_delay: float = 0.0,
     ) -> None:
         self.scenario = scenario
         self.users = users
         self.duration = duration
         self.config = config
         self.ramp_up = min(ramp_up, duration)
+        self.request_delay = request_delay
         self.metrics = Metrics()
         self._stop = asyncio.Event()
         self._started: float | None = None
@@ -98,6 +100,7 @@ class BenchmarkRunner:
                 duration=self.duration,
                 workers=self.users,
                 ramp_up=self.ramp_up,
+                request_delay=self.request_delay,
                 results=self.metrics.snapshot(),
             )
 
@@ -114,3 +117,5 @@ class BenchmarkRunner:
             ok = await self.scenario.run(client)
             elapsed = (time.perf_counter() - start) * 1000
             await self.metrics.record(elapsed, ok)
+            if self.request_delay:
+                await asyncio.sleep(self.request_delay / 1000)

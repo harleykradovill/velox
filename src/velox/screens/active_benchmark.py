@@ -27,6 +27,18 @@ def _parse_duration(value: str) -> float:
     return int(value[:-1]) * (60 if value.endswith("m") else 1)
 
 
+def _parse_request_delay(value: str) -> float:
+    """
+    Parse a request delay string like "250ms" or "1s" into milliseconds.
+
+    :param value: Request delay string ending in "ms" or "s"
+    :returns: Request delay in milliseconds
+    """
+    if value.endswith("ms"):
+        return float(value[:-2])
+    return float(value[:-1]) * 1000
+
+
 def _fmt_ms(ms: float) -> str:
     """
     Format milliseconds as a compact string.
@@ -54,7 +66,13 @@ class ActiveBenchmarkScreen(Screen):
     """
 
     def __init__(
-        self, scenario, users: int, duration: str, config, ramp_up: str = "0s"
+        self,
+        scenario,
+        users: int,
+        duration: str,
+        config,
+        ramp_up: str = "0s",
+        request_delay: str = "0ms",
     ) -> None:
         """
         Create the screen and its benchmark runner.
@@ -64,6 +82,7 @@ class ActiveBenchmarkScreen(Screen):
         :param duration: Duration string like "30s" or "5m"
         :param config: Application configuration
         :param ramp_up: Ramp-up duration string like "10s" or "1m"
+        :param request_delay: Delay between requests like "250ms" or "1s"
         """
         super().__init__()
         self.runner = BenchmarkRunner(
@@ -71,6 +90,7 @@ class ActiveBenchmarkScreen(Screen):
             users=users,
             duration=_parse_duration(duration),
             ramp_up=_parse_duration(ramp_up),
+            request_delay=_parse_request_delay(request_delay),
             config=config,
         )
         self._samples: list[float] = []

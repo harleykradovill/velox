@@ -35,6 +35,14 @@ def _fmt_duration(seconds: float) -> str:
     return f"{minutes:02d}:{secs:02d}"
 
 
+def _fmt_request_delay(ms: float) -> str:
+    if ms <= 0:
+        return "None"
+    if ms >= 1000:
+        return f"{ms / 1000:g}s"
+    return f"{ms:g}ms"
+
+
 def _fmt_throughput(requests: int, duration: float) -> str:
     return f"{requests / max(duration, 1):.1f} req/sec"
 
@@ -111,7 +119,7 @@ class BenchmarkDetailsScreen(Screen):
             Label("Latency Distribution", classes="plot-title"),
             Center(PlotWidget(id="histogram-plot", allow_pan_and_zoom=False)),
             Label(
-                f"Users: {self.benchmark.workers}   Duration: {_fmt_duration(self.benchmark.duration)}   Ramp-Up: {_fmt_duration(self.benchmark.ramp_up)}",
+                f"Users: {self.benchmark.workers}   Duration: {_fmt_duration(self.benchmark.duration)}   Ramp-Up: {_fmt_duration(self.benchmark.ramp_up)}   Request Delay: {_fmt_request_delay(self.benchmark.request_delay)}",
                 id="details-meta",
             ),
             Center(Button("Go Back", id="return", classes="btn-details")),

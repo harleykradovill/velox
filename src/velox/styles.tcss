@@ -378,6 +378,10 @@ $surface: #202020;
     width: 10;
 }
 
+.cell-request_delay {
+    width: 10;
+}
+
 .cell-workers {
     width: 10;
 }

@@ -2,7 +2,7 @@
 <img height="100" alt="Velox" src="https://github.com/harleykradovill/velox/blob/main/assets/velox.png?raw=true" />
 </p>
 
-A terminal app that load tests your Jellyfin server and shows you how it holds up.
+A terminal app that load tests your Jellyfin server to show potential problems.
 
 ### Scenarios
 

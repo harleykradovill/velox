@@ -15,6 +15,7 @@ COLUMNS = {
     "scenario": 20,
     "duration": 10,
     "ramp_up": 10,
+    "request_delay": 10,
     "workers": 10,
 }
 
@@ -22,6 +23,14 @@ COLUMNS = {
 def _fmt_duration(seconds: float) -> str:
     minutes, secs = divmod(int(seconds), 60)
     return f"{minutes:02d}:{secs:02d}"
+
+
+def _fmt_request_delay(ms: float) -> str:
+    if ms <= 0:
+        return "None"
+    if ms >= 1000:
+        return f"{ms / 1000:g}s"
+    return f"{ms:g}ms"
 
 
 def _fmt_created(created_at: datetime) -> str:
@@ -43,7 +52,14 @@ class BenchmarkHistoryScreen(Screen):
         yield Static(LOGO, id="logo")
         yield Container(
             Container(
-                _row("Date/Time", "Scenario", "Duration", "Ramp-Up", "Workers"),
+                _row(
+                    "Date/Time",
+                    "Scenario",
+                    "Duration",
+                    "Ramp-Up",
+                    "Request Delay",
+                    "Workers",
+                ),
                 ListView(id="history-list", classes="history-list"),
                 id="history-table",
             ),
@@ -65,6 +81,7 @@ class BenchmarkHistoryScreen(Screen):
                         benchmark.scenario,
                         _fmt_duration(benchmark.duration),
                         _fmt_duration(benchmark.ramp_up),
+                        _fmt_request_delay(benchmark.request_delay),
                         f"{benchmark.workers}",
                     ),
                     id=f"benchmark-{benchmark.id}",

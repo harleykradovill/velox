@@ -18,6 +18,7 @@ class Benchmark(Base):
     duration: Mapped[float] = mapped_column(Float)
     workers: Mapped[int] = mapped_column(Integer)
     ramp_up: Mapped[float] = mapped_column(Float, default=0.0)
+    request_delay: Mapped[float] = mapped_column(Float, default=0.0)
     results: Mapped[dict] = mapped_column(JSON)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
@@ -31,6 +32,7 @@ def save_benchmark(
     duration: float,
     workers: int,
     ramp_up: float,
+    request_delay: float,
     results: dict,
 ) -> Benchmark:
     """
@@ -40,6 +42,7 @@ def save_benchmark(
     :param duration: Benchmark duration in seconds.
     :param workers: Number of concurrent workers.
     :param ramp_up: Ramp-up duration in seconds.
+    :param request_delay: Delay between requests in milliseconds.
     :param results: Metrics snapshot to store as JSON.
     :returns: The persisted benchmark row
     """
@@ -49,6 +52,7 @@ def save_benchmark(
             duration=duration,
             workers=workers,
             ramp_up=ramp_up,
+            request_delay=request_delay,
             results=results,
         )
         session.add(benchmark)

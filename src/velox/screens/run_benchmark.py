@@ -43,6 +43,15 @@ RAMP_UPS = [
     ("1 minute", "1m"),
 ]
 
+REQUEST_DELAYS = [
+    ("None", "0ms"),
+    ("100ms", "100ms"),
+    ("250ms", "250ms"),
+    ("500ms", "500ms"),
+    ("1s", "1000ms"),
+    ("2s", "2000ms"),
+]
+
 SCENARIO_SELECT = "#scenario"
 
 
@@ -74,6 +83,14 @@ class RunBenchmarkScreen(Screen):
                 classes="select",
                 allow_blank=True,
                 prompt="Select ramp-up",
+            ),
+            Label("Request Delay"),
+            Select(
+                REQUEST_DELAYS,
+                id="request-delay",
+                classes="select",
+                allow_blank=True,
+                prompt="Select request delay",
             ),
             Label("Duration"),
             Select(
@@ -126,7 +143,13 @@ class RunBenchmarkScreen(Screen):
         """
         return all(
             not self.query_one(selector, Select).is_blank()
-            for selector in (SCENARIO_SELECT, "#users", "#ramp-up", "#duration")
+            for selector in (
+                SCENARIO_SELECT,
+                "#users",
+                "#ramp-up",
+                "#request-delay",
+                "#duration",
+            )
         )
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
@@ -152,12 +175,14 @@ class RunBenchmarkScreen(Screen):
         duration = self.query_one("#duration", Select).value
         scenario = self.query_one(SCENARIO_SELECT, Select).value
         ramp_up = self.query_one("#ramp-up", Select).value
+        request_delay = self.query_one("#request-delay", Select).value
         self.app.push_screen(
             ActiveBenchmarkScreen(
                 scenario=self._make_scenario(scenario),
                 users=users,
                 duration=duration,
                 ramp_up=ramp_up,
+                request_delay=request_delay,
                 config=self.app.config,
             )
         )
