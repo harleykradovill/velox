@@ -13,9 +13,10 @@ A terminal app that load tests your Jellyfin server to show potential problems.
 
 ### Running a benchmark
 
-Four configurable options:
+Five configurable options:
 
 - **Scenario:** The scenario that the benchmark exercises.
 - **Concurrent Workers:** How many simultaneous virual users hit the server at once. Higher values put more load on the server.
-- **Ramp-Up Time:** How long it takes to bring all workers online. A longer ramp-up eases the server into the load instead of hitting it with everything at once.
+- **Ramp-Up Time:** How long it takes to bring all workers online. A longer ramp-up eases the the server into the load instead of hitting it with everything at once.
+- **Request Delay:** The delay each worker waits between requests. Real users don't hammer the API back-to-back, so a small delay makes the load more realistic than a pure saturation test.
 - **Duration:** How long the benchmark runs.
