@@ -3,6 +3,7 @@ from ..benchmark import (
     DiscoveryBenchmarkScenario,
     GeneralBenchmarkScenario,
     LibraryBenchmarkScenario,
+    PeopleStudiosBenchmarkScenario,
     SearchBenchmarkScenario,
 )
 from ..connection import check_server
@@ -19,6 +20,7 @@ SCENARIOS = [
     ("Library", "library"),
     ("Search", "search"),
     ("Discovery", "discovery"),
+    ("People & Studios", "people-studios"),
 ]
 
 DURATIONS = [
@@ -195,6 +197,8 @@ class RunBenchmarkScreen(Screen):
             return SearchBenchmarkScenario()
         if value == "discovery":
             return DiscoveryBenchmarkScenario()
+        if value == "people-studios":
+            return PeopleStudiosBenchmarkScenario()
         return GeneralBenchmarkScenario()
 
     def key_down(self) -> None:

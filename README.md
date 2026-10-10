@@ -10,6 +10,7 @@ A terminal app that load tests your Jellyfin server to show potential problems.
 - **Library:** Library browsing: root and folder listings, pagination, sorting, filtering, item-type views, latest items, and item counts.
 - **Search:** Search queries: plain terms, item-type and media-type filters, paged results, and user-scoped searches.
 - **Discovery:** Home screen discovery: suggestions, movie recommendations, next up and upcoming episodes, latest items, resume rows, and user data.
+- **People & Studios:** Person, studio, genre, and year browsing: listings, detail views, sorting, and person-type filters.
 
 ### Running a benchmark
 

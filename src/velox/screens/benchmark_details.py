@@ -10,6 +10,7 @@ from ..benchmark import (
     GeneralBenchmarkScenario,
     LibraryBenchmarkScenario,
     SearchBenchmarkScenario,
+    PeopleStudiosBenchmarkScenario,
 )
 from ..storage import Benchmark
 
@@ -22,6 +23,7 @@ _SCENARIO_BUDGETS = {
         LibraryBenchmarkScenario,
         SearchBenchmarkScenario,
         DiscoveryBenchmarkScenario,
+        PeopleStudiosBenchmarkScenario,
     )
 }
 
