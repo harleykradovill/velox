@@ -391,6 +391,139 @@ $surface: #202020;
     text-style: bold;
 }
 
+/* ==================== */
+/* Compare Results Screen */
+/* ==================== */
+
+#compare-container {
+    width: 100%;
+    height: auto;
+    align: center top;
+    margin-top: 1;
+}
+
+#compare-container > Label {
+    color: $primary;
+    text-style: bold;
+    margin-top: 1;
+}
+
+#compare-lists {
+    width: 100%;
+    height: auto;
+    margin-top: 1;
+}
+
+#compare-a,
+#compare-b {
+    width: 1fr;
+    height: auto;
+}
+
+#compare-a .compare-header,
+#compare-b .compare-header {
+    color: $primary;
+    text-style: bold;
+    width: 100%;
+    text-align: center;
+    margin-top: 1;
+}
+
+.compare-list {
+    width: 100%;
+    height: auto;
+}
+
+.compare-list ListItem {
+    height: 1;
+}
+
+.compare-list ListItem.highlight {
+    background: $primary;
+}
+
+.compare-list ListItem.highlight Label {
+    color: $background;
+}
+
+/* ===================== */
+/* Comparison Screen     */
+/* ===================== */
+
+#compare-container .stats-grid {
+    grid-size: 4 2;
+    grid-columns: 18 18 18 18;
+    grid-rows: 5 5;
+    width: 72;
+    height: auto;
+    margin-top: 1;
+}
+
+#compare-columns {
+    width: 72;
+    height: auto;
+    margin-top: 1;
+}
+
+#compare-columns .compare-col {
+    color: $primary;
+    text-style: bold;
+    width: 1fr;
+    text-align: center;
+}
+
+#compare-container .stat-card {
+    height: 5;
+    padding: 0 1;
+    border: round $surface;
+    background: $surface;
+}
+
+#compare-container .stat-card .stat-label {
+    color: $text-muted;
+    text-style: bold;
+    width: 100%;
+    text-align: center;
+    margin-top: 0;
+}
+
+#compare-container .stat-card .compare-value {
+    color: $primary;
+    width: 100%;
+    text-align: center;
+    margin-top: 0;
+}
+
+#compare-title {
+    color: $primary;
+    text-style: bold;
+    width: 100%;
+    text-align: center;
+    margin-top: 1;
+}
+
+#compare-container .plot-title {
+    color: $primary;
+    text-style: bold;
+    width: 100%;
+    text-align: center;
+    margin-top: 1;
+}
+
+#compare-container #histogram-plot {
+    width: 85;
+    height: 10;
+    margin-top: 1;
+    margin-left: -8;
+}
+
+#compare-meta {
+    color: $text-muted;
+    width: 100%;
+    text-align: center;
+    margin-top: 1;
+}
+
 /* ============ */
 /* Error Screen */
 /* ============ */
