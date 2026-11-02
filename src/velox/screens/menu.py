@@ -91,11 +91,9 @@ class MainMenu(Screen):
         yield Static(LOGO, id="logo")
         yield Container(
             ListView(
-                ListItem(Label("Run Benchmark"), id="benchmark"),
-                ListItem(Label("Run Transcode Benchmark"), id="transcode-benchmark"),
-                ListItem(
-                    Label("Check Transcoding Capability"), id="transcode-capability"
-                ),
+                ListItem(Label("API Benchmark"), id="benchmark"),
+                ListItem(Label("Transcode Benchmark"), id="transcode-benchmark"),
+                ListItem(Label("Transcoding Capability"), id="transcode-capability"),
                 ListItem(Label("Benchmark History"), id="history"),
                 ListItem(Label("Compare Results"), id="compare"),
                 ListItem(Label("Configuration"), id="configuration"),
