@@ -550,3 +550,75 @@ $surface: #202020;
     color: $text;
     margin-top: 1;
 }
+
+/* =========================== */
+/* Transcode Capability Screen */
+/* =========================== */
+
+#cap-page {
+    width: 100%;
+    height: 1fr;
+    margin-top: 1;
+    align: center top;
+}
+
+#capabilities-container {
+    width: 80;
+    max-width: 100%;
+    height: 1fr;
+    padding: 0 2;
+}
+
+#cap-title {
+    width: 100%;
+    color: $primary;
+    text-style: bold;
+    text-align: center;
+    margin-top: 1;
+}
+
+#cap-warning {
+    width: 100%;
+    margin-top: 1;
+    padding: 0 1;
+    border-left: thick $primary;
+    color: $text-muted;
+    text-style: italic;
+}
+
+#cap-tools,
+#cap-tonemap {
+    width: 100%;
+    margin-top: 1;
+}
+
+#cap-encoders,
+#cap-hardware {
+    width: 100%;
+    height: auto;
+    margin-top: 1;
+    padding: 0 1;
+    text-wrap: wrap;
+    border: round $surface;
+    background: $surface;
+}
+
+#cap-buttons {
+    width: 80;
+    max-width: 100%;
+    height: auto;
+    margin-top: 1;
+    align: center middle;
+}
+
+.btn-cap {
+    width: 20;
+    margin: 0 1;
+}
+
+.btn-cap:focus {
+    background: $primary;
+    color: $background;
+}
+
+

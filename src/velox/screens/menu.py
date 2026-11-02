@@ -10,6 +10,7 @@ from .configuration import ConfigurationScreen
 from .run_benchmark import RunBenchmarkScreen
 from .benchmark_history import BenchmarkHistoryScreen
 from .compare import CompareScreen
+from .transcode_capabilities import TranscodingCapabilitiesScreen
 
 POLL_INTERVAL = 10
 
@@ -135,3 +136,5 @@ class MainMenu(Screen):
             self.app.push_screen(BenchmarkHistoryScreen())
         elif event.item.id == "compare":
             self.app.push_screen(CompareScreen())
+        elif event.item.id == "transcode-capability":
+            self.app.push_screen(TranscodingCapabilitiesScreen())
